@@ -1,0 +1,70 @@
+
+  .ek-footer {
+    padding: 60px 0 40px;
+  }
+ 
+  .ek-footer .ek-logo {
+  display: block;
+  text-align: left;   /* fuerza alineación a la izquierda */
+}
+
+.ek-footer .ek-logo img {
+  display: block;
+  margin: 0 0 12px -35px;  /* elimina cualquier auto-margin que lo centre */
+  max-height: 70px;
+  width: auto;
+}
+  .ek-footer .ek-logo .ek-sub {
+    font-size: 0.55rem;
+    letter-spacing: 2px;
+    display: block;
+    margin-top: 2px;
+  }
+ 
+  .ek-footer h6 {
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin-bottom: 1.6rem;
+  }
+ 
+  .ek-footer ul {
+    list-style: none;
+    padding-left: 0;
+  }
+ 
+  .ek-footer ul li {
+    margin-bottom: 0.9rem;
+  }
+ 
+  .ek-footer a {
+    color: #1a1a1a;
+    text-decoration: none;
+    font-size: 0.9rem;
+  }
+  .ek-footer a:hover {
+    color: #b08d57;
+  }
+ 
+  .ek-footer p {
+    color: #8a8a8a;
+    font-size: 0.9rem;
+  }
+ 
+  .ek-contact-info a,
+  .ek-contact-info span {
+    font-size: 0.9rem;
+    color: #1a1a1a;
+  }
+ 
+  .ek-social a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    margin-right: 10px;
+    font-size: 1.7rem;
+    color: #1a1a1a;
+  }
+  
