@@ -16,6 +16,7 @@
   <script src="js/carrito.js"></script>
   <script src="js/wishlist.js"></script>
   <script src="js/registro.js"></script>
+  <script src="js/vista_rapida.js"></script>
 </head>
 
 <body>
@@ -170,6 +171,8 @@
               <a href="#" class="small text-muted text-decoration-none" data-bs-dismiss="modal">← Volver a la tienda</a>
             </div>
           </div>
+
+          <!-- Panel registro -->
 
           <div class="tab-pane fade" id="panel-registro">
             <form class="needs-validation" novalidate>
@@ -463,6 +466,127 @@
     </div>
   </div>
 
+  <!-- OFFCANVAS carrito de compras -->
+
+  <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasCarrito" aria-labelledby="offcanvasCarritoLabel">
+    <div class="offcanvas-header border-bottom">
+      <h5 class="offcanvas-title" id="offcanvasCarritoLabel">Carrito de compras</h5>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body d-flex flex-column">
+
+      <div id="cart-items-container"></div>
+
+      <div id="cart-empty-message" class="text-center text-secondary my-5">
+        <i class='bx bx-cart fs-1'></i>
+        <p class="mt-2 mb-0">Tu carrito está vacío</p>
+      </div>
+
+      <div class="mt-auto pt-3">
+        <hr>
+        <div class="d-flex justify-content-between mb-2 small">
+          <span>Sub-total:</span>
+          <span id="cart-subtotal">₡0.00</span>
+        </div>
+        <div class="d-flex justify-content-between mb-2 small">
+          <span>Descuento:</span>
+          <span id="cart-discount">- ₡0.00</span>
+        </div>
+        <div class="d-flex justify-content-between mb-3 small">
+          <span>Costo de envío:</span>
+          <span id="cart-shipping">₡0.00</span>
+        </div>
+        <hr>
+        <div class="d-flex justify-content-between mb-3 fw-semibold">
+          <span>Total:</span>
+          <span id="cart-total">₡0.00</span>
+        </div>
+
+        <button class="btn btn-dark w-100 rounded-0 py-2 mb-2" type="button">Finalizar Pedido</button>
+        <button class="btn btn-outline-dark w-100 rounded-0 py-2" type="button" data-bs-dismiss="offcanvas">Ver
+          carrito
+          de compras</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- OFFCANVAS lista de deseados -->
+
+  <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasDeseados" aria-labelledby="offcanvasDeseadosLabel">
+    <div class="offcanvas-header border-bottom">
+      <h5 class="offcanvas-title" id="offcanvasDeseadosLabel">Lista de deseados</h5>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body d-flex flex-column">
+
+      <div id="wishlist-items-container"></div>
+
+      <div id="wishlist-empty-message" class="text-center text-secondary my-5">
+        <i class='bx bx-heart fs-1'></i>
+        <p class="mt-2 mb-0">Tu lista de deseados está vacía</p>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- MODAL VISTA RÁPIDA -->
+
+  <div class="modal fade" id="modalVistaRapida" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content border-0 rounded-4">
+
+        <button type="button" class="btn-close position-absolute top-0 end-0 m-3 z-1" data-bs-dismiss="modal"
+          aria-label="Cerrar"></button>
+
+        <div class="modal-body p-4">
+          <div class="row g-4">
+
+            <!-- Imagen -->
+            <div class="col-md-5">
+              <img id="vr-img" src="" alt="" class="img-fluid rounded-3">
+            </div>
+
+            <!-- Info -->
+            <div class="col-md-7">
+              <span id="vr-badge-agotado" class="badge bg-danger rounded-0 mb-2" style="display:none;">Agotado</span>
+              <h4 id="vr-nombre" class="mb-2"></h4>
+              <p id="vr-precio" class="fs-4 mb-3"></p>
+
+              <div class="mb-3" id="vr-color-wrapper">
+                <p class="small fw-semibold mb-2">Color:</p>
+                <div class="d-flex gap-2 flex-wrap" id="vr-color-group"></div>
+              </div>
+
+              <div class="mb-3" id="vr-talla-wrapper">
+                <p class="small fw-semibold mb-2">Tamaño:</p>
+                <div class="d-flex gap-2 flex-wrap" id="vr-talla-group"></div>
+              </div>
+
+              <p id="vr-error" class="text-danger small mb-3" style="display:none;">
+                Selecciona un color y una talla antes de agregar al carrito.
+              </p>
+
+              <div class="d-flex align-items-center gap-3">
+                <div class="d-flex align-items-center border">
+                  <button type="button" class="btn ek-qty-btn" id="vr-qty-minus">−</button>
+                  <input type="text" id="vr-qty-input" class="form-control text-center border-0 shadow-none"
+                    style="width: 50px;" value="1" readonly>
+                  <button type="button" class="btn ek-qty-btn" id="vr-qty-plus">+</button>
+                </div>
+
+                <button type="button" class="btn btn-dark rounded-0 px-4" id="vr-btn-agregar">
+                  Agregar al carrito
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- CARROUSEL -->
 
@@ -482,7 +606,7 @@
 
             <div class="col-6 col-md-3">
               <div class="ek-product-card">
-                <div class="ek-product-img-wrapper">
+                <div class="ek-product-img-wrapper" data-product-id="0005">
                   <span class="ek-badge-agotado">Agotado</span>
                   <img src="Recursos/Ropa/0005-product.jpg" alt="Vestido Rosa">
                   <a href="#" class="ek-wishlist-btn">
@@ -503,7 +627,7 @@
 
             <div class="col-6 col-md-3">
               <div class="ek-product-card">
-                <div class="ek-product-img-wrapper">
+                <div class="ek-product-img-wrapper" data-product-id="0002">
                   <img src="Recursos/Ropa/0002-product.jpg" alt="Short Blanco">
                   <a href="#" class="ek-wishlist-btn">
                     <i class='bx bx-heart'></i>
@@ -523,7 +647,7 @@
 
             <div class="col-6 col-md-3">
               <div class="ek-product-card">
-                <div class="ek-product-img-wrapper">
+                <div class="ek-product-img-wrapper" data-product-id="0005" data-colors="Beige" data-tallas="S,M,L">
                   <span class="ek-badge-agotado">Agotado</span>
 
                   <a href="producto1.html">
@@ -551,7 +675,8 @@
 
             <div class="col-6 col-md-3">
               <div class="ek-product-card">
-                <div class="ek-product-img-wrapper">
+                <div class="ek-product-img-wrapper" data-product-id="0003" data-colors="Blanco" data-tallas="S,M,L"
+                  data-tallas-agotadas="M">
                   <img src="Recursos/Ropa/0003-product.jpg" alt="Short Blanco">
                   <a href="#" class="ek-wishlist-btn">
                     <i class='bx bx-heart'></i>
@@ -578,7 +703,7 @@
 
             <div class="col-6 col-md-3">
               <div class="ek-product-card">
-                <div class="ek-product-img-wrapper">
+                <div class="ek-product-img-wrapper" data-product-id="0001">
                   <img src="Recursos/Ropa/0001-product.jpg" alt="Jeans Brillos">
                   <a href="#" class="ek-wishlist-btn">
                     <i class='bx bx-heart'></i>
@@ -598,7 +723,7 @@
 
             <div class="col-6 col-md-3">
               <div class="ek-product-card">
-                <div class="ek-product-img-wrapper">
+                <div class="ek-product-img-wrapper" data-product-id="0004">
                   <img src="Recursos/Ropa/0004-product.jpg" alt="Vestido Rojo">
                   <a href="#" class="ek-wishlist-btn">
                     <i class='bx bx-heart'></i>
@@ -618,7 +743,7 @@
 
             <div class="col-6 col-md-3">
               <div class="ek-product-card">
-                <div class="ek-product-img-wrapper">
+                <div class="ek-product-img-wrapper" data-product-id="0006">
                   <img src="Recursos/Ropa/0006-product.jpg" alt="Vestido Estampado">
                   <a href="#" class="ek-wishlist-btn">
                     <i class='bx bx-heart'></i>
@@ -638,7 +763,7 @@
 
             <div class="col-6 col-md-3">
               <div class="ek-product-card">
-                <div class="ek-product-img-wrapper">
+                <div class="ek-product-img-wrapper" data-product-id="0008">
                   <img src="Recursos/Ropa/0008-product.jpg" alt="Vestido Estampado">
                   <a href="#" class="ek-wishlist-btn">
                     <i class='bx bx-heart'></i>
@@ -664,7 +789,7 @@
 
             <div class="col-6 col-md-3">
               <div class="ek-product-card">
-                <div class="ek-product-img-wrapper">
+                <div class="ek-product-img-wrapper" data-product-id="0007">
                   <img src="Recursos/Ropa/0007-product.jpg" alt="Set Polka Dot">
                   <a href="#" class="ek-wishlist-btn">
                     <i class='bx bx-heart'></i>
@@ -684,7 +809,7 @@
 
             <div class="col-6 col-md-3">
               <div class="ek-product-card">
-                <div class="ek-product-img-wrapper">
+                <div class="ek-product-img-wrapper" data-product-id="0010">
                   <img src="Recursos/Ropa/0010-product.jpg" alt="Blusa Polka Dot">
                   <a href="#" class="ek-wishlist-btn">
                     <i class='bx bx-heart'></i>
@@ -704,8 +829,8 @@
 
             <div class="col-6 col-md-3">
               <div class="ek-product-card">
-                <div class="ek-product-img-wrapper">
-                  <img src="Recursos/Ropa/0011-product.jpg" alt="Vestido Estampado">
+                <div class="ek-product-img-wrapper" data-product-id="0011">
+                  <img src="Recursos/Ropa/0011-product.jpg" alt="Vestido Estampado Rosa">
                   <a href="#" class="ek-wishlist-btn">
                     <i class='bx bx-heart'></i>
                   </a>
@@ -724,7 +849,7 @@
 
             <div class="col-6 col-md-3">
               <div class="ek-product-card">
-                <div class="ek-product-img-wrapper">
+                <div class="ek-product-img-wrapper" data-product-id="0023">
                   <img src="Recursos/Ropa/0023-product.jpg" alt="Vestido Amarillo">
                   <a href="#" class="ek-wishlist-btn">
                     <i class='bx bx-heart'></i>
@@ -761,11 +886,13 @@
 
 
   <!-- Nuevos Ingresos -->
+
   <div class="container" style="text-align: center; padding-top: 20px;">
     <h3 style="color: black; padding-bottom: 20px;">Nuevos Ingresos</h3>
 
 
     <!-- Botones de filtrado -->
+
     <button style="background-color: #000000; border: none;" type="button" class="btn btn-primary btn-filter rounded-0"
       data-categoria="Todo">Todos</button>
     <button style="background-color: #000000; border: none;" type="button" class="btn btn-primary btn-filter rounded-0"
@@ -782,7 +909,7 @@
         <div class="col-lg-4 ropa"
           style="padding: 25px; box-shadow: 5px 10px 15px rgba(0,0,0,0.1); border-radius: 10px;" data-type="Skort">
 
-          <div class="ek-product-img-wrapper">
+          <div class="ek-product-img-wrapper" data-product-id="0024">
             <img src="Recursos/Ropa/0024-product.jpg" alt="Skort Celeste">
             <a href="#" class="ek-wishlist-btn">
               <i class='bx bx-heart'></i>
@@ -801,7 +928,7 @@
         <div class="col-lg-4 ropa"
           style="padding: 25px; box-shadow: 5px 10px 15px rgba(0,0,0,0.1); border-radius: 10px;" data-type="Top">
 
-          <div class="ek-product-img-wrapper">
+          <div class="ek-product-img-wrapper" data-product-id="0016">
             <img src="Recursos/Ropa/0016-product.jpg" alt="Top Celeste">
             <a href="#" class="ek-wishlist-btn">
               <i class='bx bx-heart'></i>
@@ -820,7 +947,7 @@
         <div class="col-lg-4 ropa"
           style="padding: 25px; box-shadow: 5px 10px 15px rgba(0,0,0,0.1); border-radius: 10px;" data-type="Falda">
 
-          <div class="ek-product-img-wrapper">
+          <div class="ek-product-img-wrapper" data-product-id="0017">
             <img src="Recursos/Ropa/0017-product.jpg" alt="Falda Estampada">
             <a href="#" class="ek-wishlist-btn">
               <i class='bx bx-heart'></i>
@@ -839,7 +966,7 @@
         <div class="col-lg-4 ropa"
           style="padding: 25px; box-shadow: 5px 10px 15px rgba(0,0,0,0.1); border-radius: 10px;" data-type="Top">
 
-          <div class="ek-product-img-wrapper">
+          <div class="ek-product-img-wrapper" data-product-id="0018">
             <img src="Recursos/Ropa/0018-product.jpg" alt="Top Estampado">
             <a href="#" class="ek-wishlist-btn">
               <i class='bx bx-heart'></i>
@@ -858,7 +985,7 @@
         <div class="col-lg-4 ropa"
           style="padding: 25px; box-shadow: 5px 10px 15px rgba(0,0,0,0.1); border-radius: 10px;" data-type="Top">
 
-          <div class="ek-product-img-wrapper">
+          <div class="ek-product-img-wrapper" data-product-id="0019">
             <img src="Recursos/Ropa/0019-product.jpg" alt="Top Cafe">
             <a href="#" class="ek-wishlist-btn">
               <i class='bx bx-heart'></i>
@@ -877,7 +1004,7 @@
         <div class="col-lg-4 ropa"
           style="padding: 25px; box-shadow: 5px 10px 15px rgba(0,0,0,0.1); border-radius: 10px;" data-type="Top">
 
-          <div class="ek-product-img-wrapper">
+          <div class="ek-product-img-wrapper" data-product-id="0020">
             <img src="Recursos/Ropa/0020-product.jpg" alt="Top Negro">
             <a href="#" class="ek-wishlist-btn">
               <i class='bx bx-heart'></i>
@@ -896,7 +1023,7 @@
         <div class="col-lg-4 ropa"
           style="padding: 25px; box-shadow: 5px 10px 15px rgba(0,0,0,0.1); border-radius: 10px;" data-type="Falda">
 
-          <div class="ek-product-img-wrapper">
+          <div class="ek-product-img-wrapper" data-product-id="0021">
             <img src="Recursos/Ropa/0021-product.jpg" alt="Falda Cafe">
             <a href="#" class="ek-wishlist-btn">
               <i class='bx bx-heart'></i>
@@ -915,7 +1042,7 @@
         <div class="col-lg-4 ropa"
           style="padding: 25px; box-shadow: 5px 10px 15px rgba(0,0,0,0.1); border-radius: 10px;" data-type="Top">
 
-          <div class="ek-product-img-wrapper">
+          <div class="ek-product-img-wrapper" data-product-id="0022">
             <img src="Recursos/Ropa/0022-product.jpg" alt="Top Cafe">
             <a href="#" class="ek-wishlist-btn">
               <i class='bx bx-heart'></i>
@@ -934,7 +1061,7 @@
         <div class="col-lg-4 ropa"
           style="padding: 25px; box-shadow: 5px 10px 15px rgba(0,0,0,0.1); border-radius: 10px;" data-type="Vestido">
 
-          <div class="ek-product-img-wrapper">
+          <div class="ek-product-img-wrapper" data-product-id="0013">
             <img src="Recursos/Ropa/0013-product.jpg" alt="Vestido Negro">
             <a href="#" class="ek-wishlist-btn">
               <i class='bx bx-heart'></i>
@@ -953,8 +1080,8 @@
         <div class="col-lg-4 ropa"
           style="padding: 25px; box-shadow: 5px 10px 15px rgba(0,0,0,0.1); border-radius: 10px;" data-type="Vestido">
 
-          <div class="ek-product-img-wrapper">
-            <img src="Recursos/Ropa/0015-product.jpg" alt="Vestido Estampado">
+          <div class="ek-product-img-wrapper" data-product-id="0015">
+            <img src="Recursos/Ropa/0015-product.jpg" alt="Vestido Estampado Verde">
             <a href="#" class="ek-wishlist-btn">
               <i class='bx bx-heart'></i>
             </a>
@@ -972,7 +1099,7 @@
         <div class="col-lg-4 ropa"
           style="padding: 25px; box-shadow: 5px 10px 15px rgba(0,0,0,0.1); border-radius: 10px;" data-type="Set">
 
-          <div class="ek-product-img-wrapper">
+          <div class="ek-product-img-wrapper" data-product-id="0012">
             <img src="Recursos/Ropa/0012-product.jpg" alt="Set Rosa">
             <a href="#" class="ek-wishlist-btn">
               <i class='bx bx-heart'></i>
@@ -991,7 +1118,7 @@
         <div class="col-lg-4 ropa"
           style="padding: 25px; box-shadow: 5px 10px 15px rgba(0,0,0,0.1); border-radius: 10px;" data-type="Vestido">
 
-          <div class="ek-product-img-wrapper">
+          <div class="ek-product-img-wrapper" data-product-id="0014">
             <img src="Recursos/Ropa/0014-product.jpg" alt="Vestido Negro y Rojo">
             <a href="#" class="ek-wishlist-btn">
               <i class='bx bx-heart'></i>
@@ -1077,71 +1204,6 @@
       </div>
     </div>
   </footer>
-
-  <!-- OFFCANVAS carrito de compras -->
-  <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasCarrito" aria-labelledby="offcanvasCarritoLabel">
-    <div class="offcanvas-header border-bottom">
-      <h5 class="offcanvas-title" id="offcanvasCarritoLabel">Carrito de compras</h5>
-      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-    </div>
-    <div class="offcanvas-body d-flex flex-column">
-
-      <div id="cart-items-container"></div>
-
-      <div id="cart-empty-message" class="text-center text-secondary my-5">
-        <i class='bx bx-cart fs-1'></i>
-        <p class="mt-2 mb-0">Tu carrito está vacío</p>
-      </div>
-
-      <div class="mt-auto pt-3">
-        <hr>
-        <div class="d-flex justify-content-between mb-2 small">
-          <span>Sub-total:</span>
-          <span id="cart-subtotal">₡0.00</span>
-        </div>
-        <div class="d-flex justify-content-between mb-2 small">
-          <span>Descuento:</span>
-          <span id="cart-discount">- ₡0.00</span>
-        </div>
-        <div class="d-flex justify-content-between mb-3 small">
-          <span>Costo de envío:</span>
-          <span id="cart-shipping">₡0.00</span>
-        </div>
-        <hr>
-        <div class="d-flex justify-content-between mb-3 fw-semibold">
-          <span>Total:</span>
-          <span id="cart-total">₡0.00</span>
-        </div>
-
-        <button class="btn btn-dark w-100 rounded-0 py-2 mb-2" type="button">Finalizar Pedido</button>
-        <button class="btn btn-outline-dark w-100 rounded-0 py-2" type="button" data-bs-dismiss="offcanvas">Ver
-          carrito
-          de compras</button>
-      </div>
-
-    </div>
-  </div>
-
-  <!-- OFFCANVAS lista de deseados -->
-  <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasDeseados" aria-labelledby="offcanvasDeseadosLabel">
-    <div class="offcanvas-header border-bottom">
-      <h5 class="offcanvas-title" id="offcanvasDeseadosLabel">Lista de deseados</h5>
-      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-    </div>
-    <div class="offcanvas-body d-flex flex-column">
-
-      <div id="wishlist-items-container"></div>
-
-      <div id="wishlist-empty-message" class="text-center text-secondary my-5">
-        <i class='bx bx-heart fs-1'></i>
-        <p class="mt-2 mb-0">Tu lista de deseados está vacía</p>
-      </div>
-
-    </div>
-  </div>
-
-
-
 
 </body>
 

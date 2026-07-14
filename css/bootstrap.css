@@ -14200,4 +14200,47 @@ fieldset:disabled .btn {
 .ek-modal-arrow-next {
   right: 10px;
 }
+
+/* css para la vista rapida del modal */
+
+/* Selector de color y talla */
+.ek-swatch {
+  border: 1px solid #ccc;
+  background: #fff;
+  padding: 8px 18px;
+  font-size: 0.85rem;
+  letter-spacing: 0.5px;
+  transition: border-color 0.2s ease;
+}
+.ek-swatch:hover {
+  border-color: #1a1a1a;
+}
+.ek-swatch.selected {
+  border-color: #1a1a1a;
+  border-width: 2px;
+  font-weight: 600;
+}
+
+/* Talla/color cuando no esta disponible se muestra tachado y no se puede seleccionar */
+.ek-swatch.unavailable {
+  position: relative;
+  color: #bbb;
+  border-color: #eee;
+  pointer-events: none;
+  cursor: not-allowed;
+}
+.ek-swatch.unavailable::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 8%;
+  width: 84%;
+  border-top: 1px solid #ccc;
+  transform: rotate(-15deg);
+}
+
+.ek-qty-btn {
+  width: 38px;
+  text-align: center;
+}
 /*# sourceMappingURL=bootstrap.css.map */

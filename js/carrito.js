@@ -1,12 +1,11 @@
 document.addEventListener("DOMContentLoaded", function () {
 
-  var carrito = []; //  nombre, precio, imagen, cantidad 
+  var carrito = []; // id, nombre, precio, imagen, cantidad
   var COSTO_ENVIO = 3220; // Costo fijo de envío en colones
 
-  // ---------- Utilidades ----------
+  // se limpia el precio de símbolos y se convierte a número flotante
 
   function limpiarPrecio(texto) {
-    // Quita el símbolo ₡, espacios y separadores de miles, deja solo números y un punto decimal
     var limpio = texto.replace(/[^\d.,]/g, '').replace(/,/g, '');
     var partes = limpio.split('.').filter(Boolean);
     if (partes.length >= 2) {
@@ -20,7 +19,7 @@ document.addEventListener("DOMContentLoaded", function () {
     return '₡' + numero.toLocaleString('es-CR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   }
 
-  // Extrae nombre, precio e imagen del producto a partir del botón agregar al carrito
+  // Extrae nombre, precio, imagen e id del producto a partir del botón agregar al carrito
   function obtenerInfoProducto(boton) {
     var wrapper = boton.closest('.ek-product-img-wrapper');
     var img = wrapper.querySelector('img');
@@ -29,53 +28,59 @@ document.addEventListener("DOMContentLoaded", function () {
     var nombre, precioTexto;
 
     if (tarjeta.classList.contains('ek-product-card')) {
-      // Tarjetas del carrusel "Los Favoritos"
       nombre = tarjeta.querySelector('.ek-name').textContent.trim();
       precioTexto = tarjeta.querySelector('.ek-price').textContent.trim();
     } else {
-      // Tarjetas de "Nuevos Ingresos" (estructura con <p> simples)
       var parrafos = tarjeta.querySelectorAll('p');
       nombre = parrafos[0].textContent.trim();
       precioTexto = parrafos[1].textContent.trim();
     }
 
+    // se usa data-product-id para agregar el producto a la lista de deseados, ya que el nombre puede repetirse
+    // si falta ese atributo, se avisa por consola para que sea fácil detectar
+    var idExplicito = wrapper.dataset.productId;
+    if (!idExplicito) {
+      console.warn('Falta data-product-id en la tarjeta de "' + nombre + '". El carrito no funcionará correctamente para este producto.');
+    }
+
     return {
+      id: idExplicito,
       name: nombre,
       price: limpiarPrecio(precioTexto),
       image: img.getAttribute('src')
     };
   }
 
-  // ---------- Lógica del carrito ----------
+  // logica para el carrito de compras
 
   function agregarAlCarrito(producto) {
-    var existente = carrito.find(function (item) { return item.name === producto.name; });
+    var existente = carrito.find(function (item) { return item.id === producto.id; });
     if (existente) {
       existente.qty += 1;
     } else {
-      carrito.push({ name: producto.name, price: producto.price, image: producto.image, qty: 1 });
+      carrito.push({ id: producto.id, name: producto.name, price: producto.price, image: producto.image, qty: 1 });
     }
     renderizarCarrito();
   }
 
   window.agregarAlCarrito = agregarAlCarrito;
 
-  function cambiarCantidad(nombre, delta) {
-    var item = carrito.find(function (i) { return i.name === nombre; });
+  function cambiarCantidad(id, delta) {
+    var item = carrito.find(function (i) { return i.id === id; });
     if (!item) return;
     item.qty += delta;
     if (item.qty <= 0) {
-      carrito = carrito.filter(function (i) { return i.name !== nombre; });
+      carrito = carrito.filter(function (i) { return i.id !== id; });
     }
     renderizarCarrito();
   }
 
-  function eliminarDelCarrito(nombre) {
-    carrito = carrito.filter(function (i) { return i.name !== nombre; });
+  function eliminarDelCarrito(id) {
+    carrito = carrito.filter(function (i) { return i.id !== id; });
     renderizarCarrito();
   }
 
-  // ---------- Renderizado ----------
+  // mostar en pantalla el carrito, subtotal, envio, descuento y total
 
   function renderizarCarrito() {
     var contenedor = document.getElementById('cart-items-container');
@@ -101,12 +106,12 @@ document.addEventListener("DOMContentLoaded", function () {
           '<p class="mb-1 small fw-semibold">' + item.name + '</p>' +
           '<p class="mb-2 small text-secondary">' + formatearPrecio(item.price) + '</p>' +
           '<div class="d-flex align-items-center gap-2">' +
-          '<button class="btn btn-sm btn-outline-secondary rounded-0 py-0 px-2 btn-restar" data-nombre="' + item.name + '">-</button>' +
+          '<button class="btn btn-sm btn-outline-secondary rounded-0 py-0 px-2 btn-restar" data-id="' + item.id + '">-</button>' +
           '<span class="small">' + item.qty + '</span>' +
-          '<button class="btn btn-sm btn-outline-secondary rounded-0 py-0 px-2 btn-sumar" data-nombre="' + item.name + '">+</button>' +
+          '<button class="btn btn-sm btn-outline-secondary rounded-0 py-0 px-2 btn-sumar" data-id="' + item.id + '">+</button>' +
           '</div>' +
           '</div>' +
-          '<button class="btn btn-sm text-secondary btn-eliminar" data-nombre="' + item.name + '"><i class="bx bx-trash"></i></button>';
+          '<button class="btn btn-sm text-secondary btn-eliminar" data-id="' + item.id + '"><i class="bx bx-trash"></i></button>';
         contenedor.appendChild(fila);
       });
     }
@@ -122,34 +127,40 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById('cart-total').textContent = formatearPrecio(total);
   }
 
-  // ---------- Event listeners ----------
+  // eventos de click para agregar, sumar, restar y eliminar del carrito
 
-  // Clic en cualquier botón "Agregar al carrito" (delegación de eventos, funciona para todas las tarjetas)
   document.addEventListener('click', function (e) {
     var botonAgregar = e.target.closest('.ek-add-cart-btn');
     if (botonAgregar) {
       var producto = obtenerInfoProducto(botonAgregar);
-      agregarAlCarrito(producto);
+      var wrapper = botonAgregar.closest('.ek-product-img-wrapper');
+
+      // Si existe la vista rápida se abre y se
+      // agrega directo, para forzar la elección de color y talla.
+      if (typeof window.abrirVistaRapida === 'function') {
+        window.abrirVistaRapida(producto, wrapper);
+      } else {
+        agregarAlCarrito(producto);
+      }
     }
 
     var botonSumar = e.target.closest('.btn-sumar');
     if (botonSumar) {
-      cambiarCantidad(botonSumar.dataset.nombre, 1);
+      cambiarCantidad(botonSumar.dataset.id, 1);
     }
 
     var botonRestar = e.target.closest('.btn-restar');
     if (botonRestar) {
-      cambiarCantidad(botonRestar.dataset.nombre, -1);
+      cambiarCantidad(botonRestar.dataset.id, -1);
     }
 
     var botonEliminar = e.target.closest('.btn-eliminar');
     if (botonEliminar) {
-      eliminarDelCarrito(botonEliminar.dataset.nombre);
+      eliminarDelCarrito(botonEliminar.dataset.id);
     }
   });
 
-  // Render inicial (carrito vacío)
-  renderizarCarrito();  
+  renderizarCarrito();
 
 });
 

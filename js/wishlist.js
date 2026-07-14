@@ -32,10 +32,21 @@ document.addEventListener("DOMContentLoaded", function () {
       precioTexto = parrafos[1].textContent.trim();
     }
 
+    var precio = limpiarPrecio(precioTexto);
+
+    // se usa data-product-id para agregar el producto a la lista de deseados, ya que el nombre puede repetirse 
+    // si falta ese atributo, se avisa por consola para que sea fácil detectar 
+    var idExplicito = wrapper.dataset.productId;
+    if (!idExplicito) {
+      console.warn('Falta data-product-id en la tarjeta de "' + nombre + '". El corazón no funcionará correctamente para este producto.');
+    }
+    var key = 'id:' + idExplicito;
+
     return {
       name: nombre,
-      price: limpiarPrecio(precioTexto),
-      image: img.getAttribute('src')
+      price: precio,
+      image: img.getAttribute('src'),
+      key: key
     };
   }
 
@@ -48,18 +59,19 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function alternarDeseado(boton) {
     var producto = obtenerInfoProducto(boton);
-    var yaExiste = listaDeseados.some(function (item) { return item.name === producto.name; });
+    var yaExiste = listaDeseados.some(function (item) { return item.key === producto.key; });
 
     if (yaExiste) {
-      listaDeseados = listaDeseados.filter(function (item) { return item.name !== producto.name; });
+      listaDeseados = listaDeseados.filter(function (item) { return item.key !== producto.key; });
     } else {
       listaDeseados.push(producto);
     }
 
-    // Sincroniza el ícono en todas las tarjetas de ese mismo producto (por si se repite en el carrusel)
+    // Sincroniza el ícono en todas las tarjetas de ESE MISMO producto exacto
+    // (por si la misma prenda aparece repetida, por ejemplo en el carrusel y en Nuevos Ingresos)
     document.querySelectorAll('.ek-wishlist-btn').forEach(function (btn) {
       var info = obtenerInfoProducto(btn);
-      if (info.name === producto.name) {
+      if (info.key === producto.key) {
         actualizarIconoBoton(btn, !yaExiste);
       }
     });
@@ -67,11 +79,11 @@ document.addEventListener("DOMContentLoaded", function () {
     renderizarDeseados();
   }
 
-  function eliminarDeseado(nombre) {
-    listaDeseados = listaDeseados.filter(function (item) { return item.name !== nombre; });
+  function eliminarDeseado(key) {
+    listaDeseados = listaDeseados.filter(function (item) { return item.key !== key; });
     document.querySelectorAll('.ek-wishlist-btn').forEach(function (btn) {
       var info = obtenerInfoProducto(btn);
-      if (info.name === nombre) actualizarIconoBoton(btn, false);
+      if (info.key === key) actualizarIconoBoton(btn, false);
     });
     renderizarDeseados();
   }
@@ -97,7 +109,7 @@ document.addEventListener("DOMContentLoaded", function () {
             '<p class="mb-1 small fw-semibold">' + item.name + '</p>' +
             '<p class="mb-0 small text-secondary">' + formatearPrecio(item.price) + '</p>' +
           '</div>' +
-          '<button class="btn btn-sm text-secondary btn-eliminar-deseado" data-nombre="' + item.name + '"><i class="bx bx-trash"></i></button>';
+          '<button class="btn btn-sm text-secondary btn-eliminar-deseado" data-key="' + item.key + '"><i class="bx bx-trash"></i></button>';
         contenedor.appendChild(fila);
       });
     }
@@ -112,7 +124,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     var botonEliminarDeseado = e.target.closest('.btn-eliminar-deseado');
     if (botonEliminarDeseado) {
-      eliminarDeseado(botonEliminarDeseado.dataset.nombre);
+      eliminarDeseado(botonEliminarDeseado.dataset.key);
     }
   });
 
