@@ -86,6 +86,28 @@ document.addEventListener("DOMContentLoaded", function () {
     var contenedor = document.getElementById('cart-items-container');
     var mensajeVacio = document.getElementById('cart-empty-message');
     var badge = document.getElementById('cart-count');
+    var elSubtotal = document.getElementById('cart-subtotal');
+    var elDescuento = document.getElementById('cart-discount');
+    var elEnvio = document.getElementById('cart-shipping');
+    var elTotal = document.getElementById('cart-total');
+
+    // Verificar que todos los elementos existen antes de continuar
+    var faltantes = [];
+    if (!contenedor) faltantes.push('cart-items-container');
+    if (!mensajeVacio) faltantes.push('cart-empty-message');
+    if (!badge) faltantes.push('cart-count');
+    if (!elSubtotal) faltantes.push('cart-subtotal');
+    if (!elDescuento) faltantes.push('cart-discount');
+    if (!elEnvio) faltantes.push('cart-shipping');
+    if (!elTotal) faltantes.push('cart-total');
+
+    if (faltantes.length > 0) {
+      console.error('renderizarCarrito: faltan estos elementos en el HTML:', faltantes.join(', '));
+      return; // salir sin explotar
+    }
+    var contenedor = document.getElementById('cart-items-container');
+    var mensajeVacio = document.getElementById('cart-empty-message');
+    var badge = document.getElementById('cart-count');
 
     var totalItems = carrito.reduce(function (acc, item) { return acc + item.qty; }, 0);
     badge.textContent = totalItems;
