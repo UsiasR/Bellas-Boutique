@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Bellas Boutique — Soporte (Maqueta)</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    background: #fafafa;
+    color: #1a1a1a;
+  }
+  ::placeholder { color: #b7b3ad; }
+  button { font-family: inherit; cursor: pointer; border: none; background: none; }
+  input, textarea { font-family: inherit; outline: none; }
+
+  .bb-mock {
+    background: #ffffff;
+    max-width: 1440px;
+    margin: 0 auto;
+    box-shadow: 0 0 0 1px #eee;
+  }
+
+  /* ---------- HEADER ---------- */
+  .bb-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 22px 48px;
+    border-bottom: 1px solid #ececec;
+  }
+  .bb-logo { font-family: 'Brush Script MT', 'Segoe Script', cursive; font-size: 30px; line-height: 1; }
+  .bb-logo-sub { font-size: 9px; letter-spacing: 3px; color: #8a8a8a; margin-top: 2px; }
+  .bb-nav { display: flex; gap: 40px; font-size: 13px; letter-spacing: 0.5px; color: #333; font-weight: 500; }
+  .bb-nav button { color: #333; font-size: 13px; letter-spacing: 0.5px; font-weight: 500; }
+  .bb-nav button:hover { color: #1a1a1a; text-decoration: underline; }
+  .bb-nav span.current, .bb-nav button.current { color: #1a1a1a; font-weight: 700; }
+  .bb-icons { display: flex; align-items: center; gap: 22px; color: #333; }
+  .bb-icon { position: relative; font-size: 17px; color: #333; }
+  .bb-icon:hover { color: #000; opacity: .7; }
+  .bb-badge {
+    position: absolute; top: -8px; right: -9px;
+    background: #1a1a1a; color: #fff; font-size: 9px;
+    width: 15px; height: 15px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  /* ---------- BODY ---------- */
+  .bb-body { max-width: 1400px; margin: 0 auto; padding: 44px 48px 90px; }
+  .bb-back { font-size: 11px; letter-spacing: 1.5px; color: #8a8a8a; margin-bottom: 28px; }
+  .bb-back:hover { color: #1a1a1a; }
+
+  .bb-page-title { font-size: 13px; letter-spacing: 2px; font-weight: 700; margin-bottom: 6px; }
+  .bb-page-sub { font-size: 13px; color: #999; margin-bottom: 40px; }
+
+  .bb-columns { display: flex; gap: 90px; }
+  .bb-col-left { flex: 1; max-width: 520px; }
+  .bb-col-right { flex: 1; max-width: 460px; }
+
+  .bb-section-title { font-size: 11px; letter-spacing: 1.8px; font-weight: 700; margin-bottom: 24px; }
+
+  /* FAQ accordion */
+  .bb-faq-item {
+    display: flex; align-items: center; justify-content: space-between;
+    width: 100%; text-align: left;
+    padding: 15px 0; border-bottom: 1px solid #ececec;
+    font-size: 13px; color: #1a1a1a;
+    transition: background .15s;
+  }
+  .bb-faq-item:hover { background: #fafafa; }
+  .bb-faq-item:active .bb-faq-chevron { transform: rotate(180deg); }
+  .bb-faq-chevron { color: #999; font-size: 12px; transition: transform .15s; }
+
+  /* Form */
+  .bb-form-row { display: flex; gap: 20px; margin-bottom: 20px; }
+  .bb-field { flex: 1; display: flex; flex-direction: column; gap: 7px; }
+  .bb-label { font-size: 10px; letter-spacing: 1.2px; color: #6a6a6a; font-weight: 600; }
+  .bb-input {
+    border: 1px solid #ddd; border-radius: 2px; padding: 11px 13px;
+    font-size: 13px; color: #1a1a1a; background: #fff; width: 100%;
+  }
+  .bb-input:focus { border-color: #1a1a1a; }
+  .bb-textarea {
+    border: 1px solid #ddd; border-radius: 2px; padding: 11px 13px;
+    font-size: 13px; color: #1a1a1a; background: #fff; height: 92px;
+    width: 100%; resize: none;
+  }
+  .bb-textarea:focus { border-color: #1a1a1a; }
+  .bb-cta {
+    width: 100%; background: #1a1a1a; color: #fff; text-align: center;
+    padding: 15px; font-size: 11px; letter-spacing: 2px; font-weight: 600;
+    border-radius: 2px; margin-top: 4px; display: flex; align-items: center;
+    justify-content: center; gap: 8px; transition: opacity .15s;
+  }
+  .bb-cta:hover { opacity: .85; }
+  .bb-cta:active { transform: scale(.99); }
+
+  .bb-divider { height: 1px; background: #e3e1dd; margin: 26px 0 20px; }
+
+  .bb-contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px 40px; }
+  .bb-contact-label { font-size: 10px; letter-spacing: 1.2px; color: #999; font-weight: 700; margin-bottom: 5px; }
+  .bb-contact-value { font-size: 12.5px; color: #333; }
+</style>
+</head>
+<body>
+
+  <div class="bb-mock">
+    <!-- HEADER -->
+    <div class="bb-header">
+      <div>
+        <div class="bb-logo">Bellas</div>
+        <div class="bb-logo-sub">BOUTIQUE</div>
+      </div>
+      <div class="bb-nav">
+        <button type="button">Nuevos Ingresos</button>
+        <button type="button">Descuentos</button>
+        <button type="button">Mujer</button>
+        <button type="button" class="current">Soporte</button>
+      </div>
+      <div class="bb-icons">
+        <button type="button" class="bb-icon">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+        </button>
+        <button type="button" class="bb-icon">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 20s-7-4.4-9.5-8.8C.8 7.7 2.4 4 6 4c2 0 3.5 1.2 4.5 2.8C11.5 5.2 13 4 15 4c3.6 0 5.2 3.7 3.5 7.2C19 15.6 12 20 12 20z"/></svg>
+        </button>
+        <button type="button" class="bb-icon">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 8h12l-1 12H7L6 8z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>
+          <span class="bb-badge">1</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- BODY -->
+    <div class="bb-body">
+      <button type="button" class="bb-back">&lsaquo; VOLVER</button>
+
+      <div class="bb-page-title">SOPORTE</div>
+      <div class="bb-page-sub">Estamos aquí para ayudarte</div>
+
+      <div class="bb-columns">
+        <!-- FAQ -->
+        <div class="bb-col-left">
+          <div class="bb-section-title">PREGUNTAS FRECUENTES</div>
+
+          <button type="button" class="bb-faq-item"><span>¿Cuánto tiempo tarda el envío?</span><span class="bb-faq-chevron">&#9660;</span></button>
+          <button type="button" class="bb-faq-item"><span>¿Puedo cambiar o devolver un artículo?</span><span class="bb-faq-chevron">&#9660;</span></button>
+          <button type="button" class="bb-faq-item"><span>¿Cómo sé qué talla elegir?</span><span class="bb-faq-chevron">&#9660;</span></button>
+          <button type="button" class="bb-faq-item"><span>¿Hacen envíos a todo el país?</span><span class="bb-faq-chevron">&#9660;</span></button>
+          <button type="button" class="bb-faq-item"><span>¿Qué métodos de pago aceptan?</span><span class="bb-faq-chevron">&#9660;</span></button>
+          <button type="button" class="bb-faq-item"><span>¿Puedo rastrear mi pedido?</span><span class="bb-faq-chevron">&#9660;</span></button>
+          <button type="button" class="bb-faq-item"><span>¿Tienen tienda física?</span><span class="bb-faq-chevron">&#9660;</span></button>
+        </div>
+
+        <!-- CONTACT -->
+        <div class="bb-col-right">
+          <div class="bb-section-title">FORMULARIO DE CONTACTO</div>
+
+          <div class="bb-form-row">
+            <div class="bb-field">
+              <div class="bb-label">NOMBRE</div>
+              <input class="bb-input" type="text" placeholder="María">
+            </div>
+            <div class="bb-field">
+              <div class="bb-label">CORREO</div>
+              <input class="bb-input" type="email" placeholder="tu@correo.com">
+            </div>
+          </div>
+
+          <div class="bb-form-row">
+            <div class="bb-field">
+              <div class="bb-label">ASUNTO</div>
+              <input class="bb-input" type="text" placeholder="">
+            </div>
+          </div>
+
+          <div class="bb-form-row">
+            <div class="bb-field">
+              <div class="bb-label">MENSAJE</div>
+              <textarea class="bb-textarea" placeholder="Escribe tu mensaje aquí..."></textarea>
+            </div>
+          </div>
+
+          <button type="button" class="bb-cta">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4 20-7z"/></svg>
+            ENVIAR MENSAJE
+          </button>
+
+          <div class="bb-divider"></div>
+
+          <div class="bb-contact-grid">
+            <div>
+              <div class="bb-contact-label">WHATSAPP</div>
+              <div class="bb-contact-value">+506 8888-8888</div>
+            </div>
+            <div>
+              <div class="bb-contact-label">EMAIL</div>
+              <div class="bb-contact-value">bellasboutique@gmail.com</div>
+            </div>
+            <div>
+              <div class="bb-contact-label">HORARIO</div>
+              <div class="bb-contact-value">Lun–Sáb: 9am – 6pm</div>
+            </div>
+            <div>
+              <div class="bb-contact-label">INSTAGRAM</div>
+              <div class="bb-contact-value">@bellasboutiquecr</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>
